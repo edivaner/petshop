@@ -1,5 +1,4 @@
 # Inicializar o projeto
-
 Copiar o arquivo .env
 ``` cp .env.example .env ```
 
@@ -12,6 +11,8 @@ Instalar as dependências do projeto
 Gerar a chave da aplicação 
 ``` docker-compose exec laravel-app php artisan key:generate ``` 
 
+Rode os migrations 
+ ``` docker exec laravel-app php artisan migrate ```
 
-# Acesse pelo navegador 
+# Acesse pelo navegador
 ``` localhost:8000  ```
