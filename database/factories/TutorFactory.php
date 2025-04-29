@@ -17,7 +17,14 @@ class TutorFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'id' => $this->faker->unique()->randomNumber(),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'phone' => $this->faker->phoneNumber(),
+            'address' => $this->faker->address(),
+            'instagram' => $this->faker->userName(),
+            'whatsapp' => $this->faker->phoneNumber(),
+            'alternative_contact' => $this->faker->phoneNumber(),
         ];
     }
 }

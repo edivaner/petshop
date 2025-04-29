@@ -16,3 +16,10 @@ Rode os migrations
 
 # Acesse pelo navegador
 ``` localhost:8000  ```
+
+# Inicializar os teste
+``` ./vendor/bin/phpunit tests/Unit ```
+e
+``` ./vendor/bin/phpunit tests/Feature ```
+
+Os testes serão divididor em pastas por entidade: Exemplo Unit/Tutor Unit/Animal
