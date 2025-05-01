@@ -84,7 +84,7 @@ class TutorTest extends TestCase
         $this->tutorRepositoryMock
         ->shouldReceive('create')
         ->once()
-        ->with($data) // quando receber esses dados
+        ->with($data)
         ->andReturn((object) array_merge(['id' => 1], $data));
 
         $response = $this->tutorService->create($data);

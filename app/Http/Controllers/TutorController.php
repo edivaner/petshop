@@ -29,9 +29,20 @@ class TutorController extends Controller
         //
     }
 
-    public function store($request){
+    public function store(Request $request){
+        // dd($request->json()->all());
+        // $dada = [
+        //     "name" => "Eduardo Ferreira Silva",
+        //     "email" => "eduardo@email.com.br",
+        //     "phone" => "123456789",
+        //     "address" => "Mario Bonfim, 222 - Centro - São Paulo/SP",
+        //     "instagram" => "eduardo_silva123",
+        //     "whatsapp" => "123456789",
+        //     "alternative_contact" => "123456789",
+        // ];
+
         return $this->success(
-            $this->service->create($request),
+            $this->service->create($request->toArray()),
             'Tutor criado com sucesso',
             201
         );
