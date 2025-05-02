@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\TutorService;
 
-use App\Models\Tutor;
+use App\Services\CacheService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use PHPUnit\Framework\TestCase;
 use App\Services\TutorService;
@@ -14,13 +14,15 @@ class TutorTest extends TestCase
     use DatabaseTransactions;
     protected $tutorService;
     protected $tutorRepositoryMock;
+    protected $cacheServiceMock;
 
     public function setUp(): void
     {
         parent::setUp();
         
         $this->tutorRepositoryMock = Mockery::mock(TutorRepositoryInterface::class);
-        $this->tutorService = new TutorService($this->tutorRepositoryMock);
+        $this->cacheServiceMock = $this->createMock(CacheService::class); // Mockery::mock(CacheService::class);
+        $this->tutorService = new TutorService($this->tutorRepositoryMock, $this->cacheServiceMock);
     }
 
     public function testListTutors()
@@ -59,13 +61,18 @@ class TutorTest extends TestCase
             'alternative_contact' => '999888777',
         ];
 
+        $this->cacheServiceMock->expects($this->once())->method('getCache')->with('tutor_'.$tutorFake->id)->willReturn(null);
+        
         $this->tutorRepositoryMock
         ->shouldReceive('find')
         ->once()
         ->with($tutorFake->id)
         ->andReturn($tutorFake);
-
+        
+        //$this->cacheServiceMock->expects($this->once())->method('setCache')->with('tutor_'.$tutorFake->id, $tutorFake);
+        
         $response = $this->tutorService->get($tutorFake->id);
+
         $this->assertEquals($tutorFake->id, $response->id);
     }
 
@@ -136,13 +143,10 @@ class TutorTest extends TestCase
             'email' => 'joao@email.com',
         ];
 
-        $this->tutorRepositoryMock
-        ->shouldReceive('delete')
-        ->once()
-        ->with($tutor->id)
-        ->andReturn($tutor);
-        
+        $this->tutorRepositoryMock->shouldReceive('delete')->once()->with($tutor->id)->andReturn($tutor);
+        $this->cacheServiceMock->expects($this->once())->method('clearCache')->with('tutor_'.$tutor->id);
         $response = $this->tutorService->delete($tutor->id);
+
         $this->assertNull($response);
     }
 }

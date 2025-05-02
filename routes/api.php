@@ -2,6 +2,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AnimalController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TutorController;
 
 Route::get('/testRoute', function () {
@@ -28,3 +29,12 @@ Route::get('/animals/{id}', [AnimalController::class, 'show']);
 Route::post('/animals', [AnimalController::class, 'store']);
 Route::put('/animals/{id}', [AnimalController::class, 'update']);
 Route::delete('/animals/{id}', [AnimalController::class, 'destroy']);
+
+
+//Produto
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/{id}', [ProductController::class, 'show']);
+Route::post('/products', [ProductController::class, 'store']);
+Route::put('/products/{id}', [ProductController::class, 'update']);
+Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+

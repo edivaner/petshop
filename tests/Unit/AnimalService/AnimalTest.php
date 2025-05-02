@@ -8,6 +8,7 @@ use App\Models\Animal;
 use App\Repositories\Contracts\AnimalRepositoryInterface;
 use App\Repositories\Eloquent\AnimalRepository;
 use App\Services\AnimalService;
+use App\Services\CacheService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Mockery;
 
@@ -16,11 +17,13 @@ class AnimalTest extends TestCase{
 
     protected $animalService;
     protected $animalRepositoryMock;
+    protected $cacheServiceMock;
 
     public function setUp(): void{
         parent::setUp();
         $this->animalRepositoryMock = Mockery::mock(AnimalRepositoryInterface::class);
-        $this->animalService = new AnimalService($this->animalRepositoryMock);
+        $this->cacheServiceMock = Mockery::mock(CacheService::class);
+        $this->animalService = new AnimalService($this->animalRepositoryMock, $this->cacheServiceMock);
     }
 
     public function testCreateAnimal(){
@@ -81,7 +84,10 @@ class AnimalTest extends TestCase{
             'tutor_id' => 1,
         ];
 
+        $this->cacheServiceMock->shouldReceive('getCache')->once()->with('animal_'.$animalTeste->id)->andReturn(null);
         $this->animalRepositoryMock->shouldReceive('find')->once()->with($animalTeste->id)->andReturn($animalTeste);
+        $this->cacheServiceMock->shouldReceive('setCache')->once()->with('animal_'.$animalTeste->id, $animalTeste);
+        
 
         $animal = $this->animalService->get($animalTeste->id);
 
@@ -119,6 +125,8 @@ class AnimalTest extends TestCase{
         ];
 
         $this->animalRepositoryMock->shouldReceive('delete')->once()->with($animalTeste['id'])->andReturn(true);
+        $this->cacheServiceMock->shouldReceive('clearCache')->once()->with('animal_'.$animalTeste['id']);
+        
         $animal = $this->animalService->delete($animalTeste['id']);
 
         $this->assertTrue($animal);
