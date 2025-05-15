@@ -15,7 +15,16 @@ class ProductService
     }
 
     public function list(){
-        return ProductResource::collection($this->productRepositorio->all());
+        $cacheKey = 'products_all';
+        $products = $this->cacheService->getCache($cacheKey);
+
+        if (!$products) {
+            $products = ProductResource::collection($this->productRepositorio->all());
+            $this->cacheService->setMinutosDuracaoCache(2);
+            $this->cacheService->setCache($cacheKey, $products);
+        }
+
+        return $products;
     }
 
     public function get(int $id){
@@ -27,15 +36,18 @@ class ProductService
     }
 
     public function create(array $data){
+        $this->cacheService->clearCache('products_all');
         return new ProductResource($this->productRepositorio->create($data));
     }
 
     public function update(int $id, array $data){
+        $this->cacheService->clearCache('products_all');
         return new ProductResource($this->productRepositorio->update($id, $data));
     }
 
     public function delete(int $id){
         $this->cacheService->clearCache('product_'.$id);
+        $this->cacheService->clearCache('products_all');
         return $this->productRepositorio->delete($id);
     }
 }

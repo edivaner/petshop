@@ -14,7 +14,7 @@ Gerar a chave da aplicação
 Rode os migrations 
  ``` docker exec laravel-app php artisan migrate ```
 
-# Acesse pelo navegador
+# Acesse no endereço local
 ``` localhost:8000  ```
 
 # Inicializar os teste

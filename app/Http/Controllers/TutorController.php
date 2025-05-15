@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Tutor;
 use Illuminate\Http\Request;
 use App\Services\TutorService;
-use App\Http\Requests\StoreTutorRequest;
-use App\Http\Requests\UpdateTutorRequest;
 use App\Http\Controllers\Traits\ApiResponseTrait;
 
 

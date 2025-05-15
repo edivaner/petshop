@@ -3,6 +3,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\StockController;
 use App\Http\Controllers\TutorController;
 
 Route::get('/testRoute', function () {
@@ -37,4 +38,13 @@ Route::get('/products/{id}', [ProductController::class, 'show']);
 Route::post('/products', [ProductController::class, 'store']);
 Route::put('/products/{id}', [ProductController::class, 'update']);
 Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+
+// Stock
+Route::get('/stocks', [StockController::class, 'index']);
+Route::get('/stocks/{id}', [StockController::class, 'show']);
+Route::post('/stocks', [StockController::class, 'store']);
+Route::put('/stocks/{id}', [StockController::class, 'update']);
+Route::delete('/stocks/{id}', [StockController::class, 'destroy']);
+
+
 

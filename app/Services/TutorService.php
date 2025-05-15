@@ -16,7 +16,16 @@ class TutorService
     }
 
     public function list(){
-        return TutorResource::collection($this->repositorio->all());
+        $cacheKey = 'tutors_list';
+        $tutors = $this->cacheService->getCache($cacheKey); 
+
+        if(!$tutors){
+            $tutors = TutorResource::collection($this->repositorio->all());
+            $this->cacheService->setMinutosDuracaoCache(2);
+            $this->cacheService->setCache($cacheKey, $tutors);
+        }
+
+        return $tutors;
     }
 
     public function get(int $id){
@@ -29,17 +38,21 @@ class TutorService
 
     public function create(array $data){
         $tutor = $this->repositorio->create($data);
+        $this->cacheService->clearCache('tutors_list');
         return new TutorResource($tutor);
     }
 
     public function update(int $id, array $data){
         $tutor = $this->repositorio->update($id, $data);
+        $this->cacheService->clearCache('tutor_'.$id);
+        $this->cacheService->clearCache('tutors_list');
         return new TutorResource($tutor);
     }
 
     public function delete(int $id){
         $this->repositorio->delete($id);
         $this->cacheService->clearCache('tutor_'.$id);
+        $this->cacheService->clearCache('tutors_list');
     }
 }
 ?>
